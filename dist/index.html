@@ -8,12 +8,12 @@
   <script src="app.js" defer></script>
 </head>
 <body>
-  <div id="header">
+  <template id="header">
     <div class="content-container">
       <h1 class="header__title">TODOIST</h1>
     </div>
-  </div>
-  <div id="task-input">
+  </template>
+  <template id="task-input">
     <form>
       <div class="form-control">
         <label for="title">TITLE</label>
@@ -25,19 +25,19 @@
       </div>
       <button type="submit">ADD TASK</button>
     </form>
-  </div>
-  <div id="task-list">
+  </template>
+  <template id="single-task">
+    <li></li>
+  </template>
+  <template id="task-list">
     <section class="tasks">
       <header>
         <h2></h2>
       </header>
       <ul>   
-        <div id="single-task">
-          <li></li>
-        </div>
       </ul>
     </section>
-  </div>
+  </template>
   <div id="app"></div>
 </body>
 </html>
