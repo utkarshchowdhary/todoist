@@ -13,7 +13,8 @@ html {
 
 body {
   margin: 0;
-  background-color: #cbdadb;
+  background-image: url(alternating-arrowhead.svg);
+  background-attachment: fixed;
 }
 
 label,
@@ -21,10 +22,6 @@ input,
 textarea {
   display: block;
   margin: 0.3rem 0;
-}
-
-label {
-  font-weight: 700;
 }
 
 input,
@@ -60,7 +57,7 @@ button:active {
   border-color: #00a9d8;
 }
 
-#header {
+.header-container {
   background: #8aa899;
   color: #4a4e4d;
   margin-bottom: 2.4rem;
@@ -78,7 +75,7 @@ button:active {
   margin: 0;
 }
 
-#task-input {
+.task-input-container {
   margin: 1rem auto;
   padding: 1rem;
   max-width: 40rem;
