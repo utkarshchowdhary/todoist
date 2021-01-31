@@ -15,9 +15,9 @@ class Task {
 type Listener<T> = (items: T[]) => void;
 
 class Component<T extends HTMLElement, U extends HTMLElement> {
-  templateElement: HTMLTemplateElement;
-  hostElement: T;
-  element: U;
+  protected templateElement: HTMLTemplateElement;
+  protected hostElement: T;
+  protected element: U;
 
   constructor(templateId: string, hostElementId: string, className?: string) {
     this.templateElement = document.querySelector(
