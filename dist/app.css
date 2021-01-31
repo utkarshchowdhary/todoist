@@ -97,14 +97,6 @@ button:active {
   align-items: center;
 }
 
-#finished-tasks {
-  border-color: #7da2a9;
-}
-
-#finished-tasks header {
-  background: #7da2a9;
-}
-
 .tasks h2 {
   margin: 0;
   color: white;
@@ -127,10 +119,6 @@ button:active {
   margin: 0.5rem 0;
 }
 
-#finished-tasks li h2 {
-  color: #7da2a9;
-}
-
 .tasks li h3 {
   color: #575757;
   font-size: 1rem;
@@ -144,6 +132,18 @@ button:active {
   background: #ffe3ee;
 }
 
-#finished-tasks .droppable {
+.tasks.completed {
+  border-color: #7da2a9;
+}
+
+.tasks.completed header {
+  background: #7da2a9;
+}
+
+.tasks.completed li h2 {
+  color: #7da2a9;
+}
+
+.tasks.completed .droppable {
   background: #d6e1ff;
 }
