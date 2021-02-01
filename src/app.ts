@@ -14,34 +14,6 @@ class Task {
 
 type Listener<T> = (items: T[]) => void;
 
-class Component<T extends HTMLElement, U extends HTMLElement> {
-  protected templateElement: HTMLTemplateElement;
-  protected hostElement: T;
-  protected element: U;
-
-  constructor(templateId: string, hostElementId: string, className?: string) {
-    this.templateElement = document.querySelector(
-      `#${templateId}`
-    ) as HTMLTemplateElement;
-    this.hostElement = document.querySelector(`#${hostElementId}`) as T;
-
-    const importedNode = document.importNode(
-      this.templateElement.content,
-      true
-    );
-    this.element = importedNode.firstElementChild as U;
-
-    if (className) {
-      this.element.classList.add(className);
-    }
-    this.attach();
-  }
-
-  private attach() {
-    this.hostElement.insertAdjacentElement("beforeend", this.element);
-  }
-}
-
 class State<T> {
   protected listeners: Listener<T>[] = [];
 
@@ -123,6 +95,59 @@ function validate(validatableInput: Validatable): [boolean, string[]] {
   return [isValid, errors];
 }
 
+class Component<T extends HTMLElement, U extends HTMLElement> {
+  protected templateElement: HTMLTemplateElement;
+  protected hostElement: T;
+  protected element: U;
+
+  constructor(
+    templateId: string,
+    hostElementId: string,
+    className?: string,
+    id?: string
+  ) {
+    this.templateElement = document.querySelector(
+      `#${templateId}`
+    ) as HTMLTemplateElement;
+    this.hostElement = document.querySelector(`#${hostElementId}`) as T;
+
+    const importedNode = document.importNode(
+      this.templateElement.content,
+      true
+    );
+    this.element = importedNode.firstElementChild as U;
+
+    if (className) {
+      this.element.classList.add(className);
+    }
+    if (id) {
+      this.element.id = id;
+    }
+
+    this.attach();
+  }
+
+  private attach() {
+    this.hostElement.insertAdjacentElement("beforeend", this.element);
+  }
+}
+
+class TaskItem extends Component<HTMLUListElement, HTMLLIElement> {
+  private task: Task;
+
+  constructor(hostId: string, task: Task) {
+    super("single-task", hostId, undefined, task.id);
+    this.task = task;
+
+    this.renderContent();
+  }
+
+  private renderContent() {
+    this.element.querySelector("h2")!.textContent = this.task.title;
+    this.element.querySelector("p")!.textContent = this.task.description;
+  }
+}
+
 class TaskList extends Component<HTMLDivElement, HTMLElement> {
   tasks: Task[] = [];
 
@@ -147,17 +172,14 @@ class TaskList extends Component<HTMLDivElement, HTMLElement> {
   }
 
   private renderTasks() {
-    const listEl = this.element.querySelector("ul") as HTMLUListElement;
-    listEl.innerHTML = "";
-
+    document.querySelector(`#tasks-${this.type}`)!.innerHTML = "";
     for (const task of this.tasks) {
-      const listItem = document.createElement("li");
-      listItem.textContent = task.title;
-      listEl.appendChild(listItem);
+      new TaskItem(`tasks-${this.type}`, task);
     }
   }
 
   private renderContent() {
+    this.element.querySelector("ul")!.id = `tasks-${this.type}`;
     this.element.querySelector(
       "h2"
     )!.textContent = `${this.type.toUpperCase()} TASKS`;
@@ -186,9 +208,16 @@ class TaskInput extends Component<HTMLDivElement, HTMLElement> {
     formElement.addEventListener("submit", this.submitHandler.bind(this));
   }
 
-  private clearInputs() {
-    this.titleInputElement.value = "";
-    this.descriptionInputElement.value = "";
+  private submitHandler(event: Event) {
+    event.preventDefault();
+
+    const collectedInputs = this.collectInputs();
+
+    if (Array.isArray(collectedInputs)) {
+      const [title, desc] = collectedInputs;
+      taskState.addTask(title, desc);
+      this.clearInputs();
+    }
   }
 
   private collectInputs(): [string, string] | void {
@@ -217,16 +246,9 @@ class TaskInput extends Component<HTMLDivElement, HTMLElement> {
     return [enteredTitle, enteredDescription];
   }
 
-  private submitHandler(event: Event) {
-    event.preventDefault();
-
-    const collectedInputs = this.collectInputs();
-
-    if (Array.isArray(collectedInputs)) {
-      const [title, desc] = collectedInputs;
-      taskState.addTask(title, desc);
-      this.clearInputs();
-    }
+  private clearInputs() {
+    this.titleInputElement.value = "";
+    this.descriptionInputElement.value = "";
   }
 }
 
@@ -236,7 +258,7 @@ class Header extends Component<HTMLDivElement, HTMLElement> {
   }
 }
 
-const header = new Header();
-const taskInput = new TaskInput();
-const activeTaskList = new TaskList("active");
-const completedTaskList = new TaskList("completed");
+new Header();
+new TaskInput();
+new TaskList("active");
+new TaskList("completed");

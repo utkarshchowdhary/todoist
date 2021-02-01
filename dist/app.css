@@ -109,6 +109,7 @@ button:active {
 }
 
 .tasks li {
+  background: #a8e6cf;
   box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.26);
   padding: 1.2rem;
   margin: 1rem;
@@ -119,12 +120,7 @@ button:active {
   margin: 0.5rem 0;
 }
 
-.tasks li h3 {
-  color: #575757;
-  font-size: 1rem;
-}
-
-.task li p {
+.tasks li p {
   margin: 0;
 }
 

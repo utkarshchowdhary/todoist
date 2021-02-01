@@ -1,47 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Todoist</title>
-  <link rel="stylesheet" href="app.css" />
-  <script src="app.js" defer></script>
-</head>
-<body>
-  <template id="header">
-    <section class="header-container">
-    <div class="content-container">
-      <h1 class="header__title">TODOIST</h1>
-    </div>
-  </section>
-  </template>
-  <template id="task-input">
-    <section class="task-input-container">
-    <form>
-      <div class="form-control">
-        <label for="title">TITLE</label>
-        <input type="text" id="title" placeholder="Enter A Task Here" />
-      </div>
-      <div class="form-control">
-        <label for="description">DESCRIPTION</label>
-        <textarea id="description" rows="3" placeholder="Add Details"></textarea>
-      </div>
-      <button type="submit">ADD TASK</button>
-    </form>
-  </section>
-  </template>
-  <template id="single-task">
-    <li></li>
-  </template>
-  <template id="task-list">
-    <section class="tasks">
-      <header>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Todoist</title>
+    <link rel="stylesheet" href="app.css" />
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <template id="header">
+      <section class="header-container">
+        <div class="content-container">
+          <h1 class="header__title">TODOIST</h1>
+        </div>
+      </section>
+    </template>
+    <template id="task-input">
+      <section class="task-input-container">
+        <form>
+          <div class="form-control">
+            <label for="title">TITLE</label>
+            <input type="text" id="title" placeholder="Enter A Task Here" />
+          </div>
+          <div class="form-control">
+            <label for="description">DESCRIPTION</label>
+            <textarea
+              id="description"
+              rows="3"
+              placeholder="Add Details"
+            ></textarea>
+          </div>
+          <button type="submit">ADD TASK</button>
+        </form>
+      </section>
+    </template>
+    <template id="single-task">
+      <li>
         <h2></h2>
-      </header>
-      <ul>   
-      </ul>
-    </section>
-  </template>
-  <div id="app"></div>
-</body>
+        <p></p>
+      </li>
+    </template>
+    <template id="task-list">
+      <section class="tasks">
+        <header>
+          <h2></h2>
+        </header>
+        <ul></ul>
+      </section>
+    </template>
+    <div id="app"></div>
+  </body>
 </html>

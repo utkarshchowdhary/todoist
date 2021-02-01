@@ -12,21 +12,6 @@ class Task {
         this.status = status;
     }
 }
-class Component {
-    constructor(templateId, hostElementId, className) {
-        this.templateElement = document.querySelector(`#${templateId}`);
-        this.hostElement = document.querySelector(`#${hostElementId}`);
-        const importedNode = document.importNode(this.templateElement.content, true);
-        this.element = importedNode.firstElementChild;
-        if (className) {
-            this.element.classList.add(className);
-        }
-        this.attach();
-    }
-    attach() {
-        this.hostElement.insertAdjacentElement("beforeend", this.element);
-    }
-}
 class State {
     constructor() {
         this.listeners = [];
@@ -81,6 +66,35 @@ function validate(validatableInput) {
     }
     return [isValid, errors];
 }
+class Component {
+    constructor(templateId, hostElementId, className, id) {
+        this.templateElement = document.querySelector(`#${templateId}`);
+        this.hostElement = document.querySelector(`#${hostElementId}`);
+        const importedNode = document.importNode(this.templateElement.content, true);
+        this.element = importedNode.firstElementChild;
+        if (className) {
+            this.element.classList.add(className);
+        }
+        if (id) {
+            this.element.id = id;
+        }
+        this.attach();
+    }
+    attach() {
+        this.hostElement.insertAdjacentElement("beforeend", this.element);
+    }
+}
+class TaskItem extends Component {
+    constructor(hostId, task) {
+        super("single-task", hostId, undefined, task.id);
+        this.task = task;
+        this.renderContent();
+    }
+    renderContent() {
+        this.element.querySelector("h2").textContent = this.task.title;
+        this.element.querySelector("p").textContent = this.task.description;
+    }
+}
 class TaskList extends Component {
     constructor(type) {
         super("task-list", "app", type);
@@ -102,15 +116,13 @@ class TaskList extends Component {
         });
     }
     renderTasks() {
-        const listEl = this.element.querySelector("ul");
-        listEl.innerHTML = "";
+        document.querySelector(`#tasks-${this.type}`).innerHTML = "";
         for (const task of this.tasks) {
-            const listItem = document.createElement("li");
-            listItem.textContent = task.title;
-            listEl.appendChild(listItem);
+            new TaskItem(`tasks-${this.type}`, task);
         }
     }
     renderContent() {
+        this.element.querySelector("ul").id = `tasks-${this.type}`;
         this.element.querySelector("h2").textContent = `${this.type.toUpperCase()} TASKS`;
     }
 }
@@ -125,9 +137,14 @@ class TaskInput extends Component {
         const formElement = this.element.querySelector("form");
         formElement.addEventListener("submit", this.submitHandler.bind(this));
     }
-    clearInputs() {
-        this.titleInputElement.value = "";
-        this.descriptionInputElement.value = "";
+    submitHandler(event) {
+        event.preventDefault();
+        const collectedInputs = this.collectInputs();
+        if (Array.isArray(collectedInputs)) {
+            const [title, desc] = collectedInputs;
+            taskState.addTask(title, desc);
+            this.clearInputs();
+        }
     }
     collectInputs() {
         const enteredTitle = this.titleInputElement.value.trim();
@@ -150,14 +167,9 @@ class TaskInput extends Component {
         }
         return [enteredTitle, enteredDescription];
     }
-    submitHandler(event) {
-        event.preventDefault();
-        const collectedInputs = this.collectInputs();
-        if (Array.isArray(collectedInputs)) {
-            const [title, desc] = collectedInputs;
-            taskState.addTask(title, desc);
-            this.clearInputs();
-        }
+    clearInputs() {
+        this.titleInputElement.value = "";
+        this.descriptionInputElement.value = "";
     }
 }
 class Header extends Component {
@@ -165,7 +177,7 @@ class Header extends Component {
         super("header", "app");
     }
 }
-const header = new Header();
-const taskInput = new TaskInput();
-const activeTaskList = new TaskList("active");
-const completedTaskList = new TaskList("completed");
+new Header();
+new TaskInput();
+new TaskList("active");
+new TaskList("completed");
