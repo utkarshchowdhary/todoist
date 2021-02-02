@@ -1,3 +1,14 @@
+interface Draggable {
+  dragStartHandler(event: DragEvent): void;
+  dragEndHandler(event: DragEvent): void;
+}
+
+interface DragTarget {
+  dragOverHandler(event: DragEvent): void;
+  dropHandler(event: DragEvent): void;
+  dragLeaveHandler(event: DragEvent): void;
+}
+
 enum TaskStatus {
   Active,
   Completed,
@@ -46,6 +57,18 @@ class TaskState extends State<Task> {
       TaskStatus.Active
     );
     this.tasks.push(task);
+    this.runListeners();
+  }
+
+  moveTask(taskId: string, taskStatusToMove: TaskStatus) {
+    const task = this.tasks.find((task) => task.id === taskId);
+    if (task && task.status !== taskStatusToMove) {
+      task.status = taskStatusToMove;
+      this.runListeners();
+    }
+  }
+
+  private runListeners() {
     for (const listenerFn of this.listeners) {
       listenerFn(this.tasks.slice());
     }
@@ -132,14 +155,32 @@ class Component<T extends HTMLElement, U extends HTMLElement> {
   }
 }
 
-class TaskItem extends Component<HTMLUListElement, HTMLLIElement> {
+class TaskItem
+  extends Component<HTMLUListElement, HTMLLIElement>
+  implements Draggable {
   private task: Task;
 
   constructor(hostId: string, task: Task) {
     super("single-task", hostId, undefined, task.id);
     this.task = task;
 
+    this.configure();
     this.renderContent();
+  }
+
+  dragStartHandler(event: DragEvent) {
+    event.dataTransfer!.setData("text/plain", this.task.id);
+    event.dataTransfer!.effectAllowed = "move";
+  }
+
+  dragEndHandler(_event: DragEvent) {}
+
+  private configure() {
+    this.element.addEventListener(
+      "dragstart",
+      this.dragStartHandler.bind(this)
+    );
+    this.element.addEventListener("dragend", this.dragEndHandler);
   }
 
   private renderContent() {
@@ -148,8 +189,10 @@ class TaskItem extends Component<HTMLUListElement, HTMLLIElement> {
   }
 }
 
-class TaskList extends Component<HTMLDivElement, HTMLElement> {
-  tasks: Task[] = [];
+class TaskList
+  extends Component<HTMLDivElement, HTMLElement>
+  implements DragTarget {
+  private tasks: Task[] = [];
 
   constructor(private type: "active" | "completed") {
     super("task-list", "app", type);
@@ -158,7 +201,27 @@ class TaskList extends Component<HTMLDivElement, HTMLElement> {
     this.renderContent();
   }
 
+  dragOverHandler(event: DragEvent) {
+    if (event.dataTransfer && event.dataTransfer.types[0] === "text/plain") {
+      event.preventDefault();
+    }
+  }
+
+  dropHandler(event: DragEvent) {
+    const taskId = event.dataTransfer!.getData("text/plain");
+    taskState.moveTask(
+      taskId,
+      this.type === "active" ? TaskStatus.Active : TaskStatus.Completed
+    );
+  }
+
+  dragLeaveHandler(_event: DragEvent) {}
+
   private configure() {
+    this.element.addEventListener("dragover", this.dragOverHandler.bind(this));
+    this.element.addEventListener("drop", this.dropHandler.bind(this));
+    this.element.addEventListener("dragleave", this.dragLeaveHandler);
+
     taskState.addlistener((tasks: Task[]) => {
       const revelantTasks = tasks.filter((task) => {
         if (this.type === "active") {

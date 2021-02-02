@@ -124,10 +124,6 @@ button:active {
   margin: 0;
 }
 
-.droppable {
-  background: #ffe3ee;
-}
-
 .tasks.completed {
   border-color: #7da2a9;
 }
@@ -138,8 +134,4 @@ button:active {
 
 .tasks.completed li h2 {
   color: #7da2a9;
-}
-
-.tasks.completed .droppable {
-  background: #d6e1ff;
 }

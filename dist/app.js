@@ -34,6 +34,16 @@ class TaskState extends State {
     addTask(title, description) {
         const task = new Task(Date.now().toString(), title, description, TaskStatus.Active);
         this.tasks.push(task);
+        this.runListeners();
+    }
+    moveTask(taskId, taskStatusToMove) {
+        const task = this.tasks.find((task) => task.id === taskId);
+        if (task && task.status !== taskStatusToMove) {
+            task.status = taskStatusToMove;
+            this.runListeners();
+        }
+    }
+    runListeners() {
         for (const listenerFn of this.listeners) {
             listenerFn(this.tasks.slice());
         }
@@ -88,7 +98,17 @@ class TaskItem extends Component {
     constructor(hostId, task) {
         super("single-task", hostId, undefined, task.id);
         this.task = task;
+        this.configure();
         this.renderContent();
+    }
+    dragStartHandler(event) {
+        event.dataTransfer.setData("text/plain", this.task.id);
+        event.dataTransfer.effectAllowed = "move";
+    }
+    dragEndHandler(_event) { }
+    configure() {
+        this.element.addEventListener("dragstart", this.dragStartHandler.bind(this));
+        this.element.addEventListener("dragend", this.dragEndHandler);
     }
     renderContent() {
         this.element.querySelector("h2").textContent = this.task.title;
@@ -103,7 +123,20 @@ class TaskList extends Component {
         this.configure();
         this.renderContent();
     }
+    dragOverHandler(event) {
+        if (event.dataTransfer && event.dataTransfer.types[0] === "text/plain") {
+            event.preventDefault();
+        }
+    }
+    dropHandler(event) {
+        const taskId = event.dataTransfer.getData("text/plain");
+        taskState.moveTask(taskId, this.type === "active" ? TaskStatus.Active : TaskStatus.Completed);
+    }
+    dragLeaveHandler(_event) { }
     configure() {
+        this.element.addEventListener("dragover", this.dragOverHandler.bind(this));
+        this.element.addEventListener("drop", this.dropHandler.bind(this));
+        this.element.addEventListener("dragleave", this.dragLeaveHandler);
         taskState.addlistener((tasks) => {
             const revelantTasks = tasks.filter((task) => {
                 if (this.type === "active") {
