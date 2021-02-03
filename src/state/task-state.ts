@@ -1,3 +1,5 @@
+import { Task, TaskStatus } from "../models/task-model.js";
+
 type Listener<T> = (items: T[]) => void;
 
 class State<T> {
@@ -8,7 +10,7 @@ class State<T> {
   }
 }
 
-export class TaskState extends State<Task> {
+class TaskState extends State<Task> {
   private static instance: TaskState;
   private tasks: Task[] = [];
 

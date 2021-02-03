@@ -1,3 +1,9 @@
+import { Component } from "./base-component.js";
+import { TaskItem } from "./task-item.js";
+import { DragTarget } from "../models/drag-drop.js";
+import { Task, TaskStatus } from "../models/task-model.js";
+import { taskState } from "../state/task-state.js";
+
 export class TaskList
   extends Component<HTMLDivElement, HTMLElement>
   implements DragTarget {
