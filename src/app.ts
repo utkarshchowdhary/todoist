@@ -1,6 +1,6 @@
-import { Header } from "./components/header.js";
-import { TaskInput } from "./components/task-input.js";
-import { TaskList } from "./components/task-list.js";
+import { Header } from "./components/header";
+import { TaskInput } from "./components/task-input";
+import { TaskList } from "./components/task-list";
 
 new Header();
 new TaskInput();

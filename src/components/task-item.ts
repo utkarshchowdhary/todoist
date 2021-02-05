@@ -1,6 +1,6 @@
-import { Component } from "./base-component.js";
-import { Draggable } from "../models/drag-drop.js";
-import { Task } from "../models/task-model.js";
+import { Component } from "./base-component";
+import { Draggable } from "../models/drag-drop";
+import { Task } from "../models/task-model";
 
 export class TaskItem
   extends Component<HTMLUListElement, HTMLLIElement>

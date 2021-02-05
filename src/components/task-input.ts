@@ -1,6 +1,6 @@
-import { Component } from "./base-component.js";
-import { taskState } from "../state/task-state.js";
-import { validate } from "../utils/validation.js";
+import { Component } from "./base-component";
+import { taskState } from "../state/task-state";
+import { validate } from "../utils/validation";
 
 export class TaskInput extends Component<HTMLDivElement, HTMLElement> {
   titleInputElement: HTMLInputElement;

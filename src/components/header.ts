@@ -1,4 +1,4 @@
-import { Component } from "./base-component.js";
+import { Component } from "./base-component";
 
 export class Header extends Component<HTMLDivElement, HTMLElement> {
   constructor() {
