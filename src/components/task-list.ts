@@ -40,8 +40,9 @@ export class TaskList
       const revelantTasks = tasks.filter((task) => {
         if (this.type === "active") {
           return task.status === TaskStatus.Active;
+        } else {
+          return task.status === TaskStatus.Completed;
         }
-        return task.status === TaskStatus.Completed;
       });
       this.tasks = revelantTasks;
       this.renderTasks();
@@ -50,6 +51,7 @@ export class TaskList
 
   private renderTasks() {
     document.querySelector(`#tasks-${this.type}`)!.innerHTML = "";
+
     for (const task of this.tasks) {
       new TaskItem(`tasks-${this.type}`, task);
     }
