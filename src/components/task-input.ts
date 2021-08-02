@@ -55,7 +55,7 @@ export class TaskInput extends Component<HTMLDivElement, HTMLElement> {
     });
 
     if (!titleIsValid || !descriptionIsValid) {
-      let errors = [...titleErrors, ...descriptionErrors];
+      const errors = [...titleErrors, ...descriptionErrors];
       alert(`${errors.join(", ")}`);
       return;
     }
