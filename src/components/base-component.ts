@@ -3,29 +3,21 @@ export class Component<T extends HTMLElement, U extends HTMLElement> {
   protected hostElement: T;
   protected element: U;
 
-  constructor(
-    templateId: string,
-    hostElementId: string,
-    className?: string,
-    id?: string
-  ) {
+  constructor(templateId: string, hostElementId: string, className?: string) {
     this.templateElement = document.querySelector(
       `#${templateId}`
     ) as HTMLTemplateElement;
+
     this.hostElement = document.querySelector(`#${hostElementId}`) as T;
 
     const importedNode = document.importNode(
       this.templateElement.content,
       true
     );
+
     this.element = importedNode.firstElementChild as U;
 
-    if (className) {
-      this.element.classList.add(className);
-    }
-    if (id) {
-      this.element.id = id;
-    }
+    if (className) this.element.classList.add(className);
 
     this.attach();
   }

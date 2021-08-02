@@ -4,11 +4,12 @@ import { Task } from "../models/task-model";
 
 export class TaskItem
   extends Component<HTMLUListElement, HTMLLIElement>
-  implements Draggable {
+  implements Draggable
+{
   private task: Task;
 
   constructor(hostId: string, task: Task) {
-    super("single-task", hostId, undefined, task.id);
+    super("single-task", hostId);
     this.task = task;
 
     this.configure();
@@ -20,14 +21,11 @@ export class TaskItem
     event.dataTransfer!.effectAllowed = "move";
   }
 
-  dragEndHandler(_event: DragEvent) {}
-
   private configure() {
     this.element.addEventListener(
       "dragstart",
       this.dragStartHandler.bind(this)
     );
-    this.element.addEventListener("dragend", this.dragEndHandler);
   }
 
   private renderContent() {

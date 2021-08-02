@@ -12,6 +12,7 @@ export class TaskInput extends Component<HTMLDivElement, HTMLElement> {
     this.titleInputElement = this.element.querySelector(
       "#title"
     ) as HTMLInputElement;
+
     this.descriptionInputElement = this.element.querySelector(
       "#description"
     ) as HTMLInputElement;

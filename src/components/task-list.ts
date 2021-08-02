@@ -6,7 +6,8 @@ import { taskState } from "../state/task-state";
 
 export class TaskList
   extends Component<HTMLDivElement, HTMLElement>
-  implements DragTarget {
+  implements DragTarget
+{
   private tasks: Task[] = [];
 
   constructor(private type: "active" | "completed") {
@@ -24,18 +25,16 @@ export class TaskList
 
   dropHandler(event: DragEvent) {
     const taskId = event.dataTransfer!.getData("text/plain");
+
     taskState.moveTask(
       taskId,
       this.type === "active" ? TaskStatus.Active : TaskStatus.Completed
     );
   }
 
-  dragLeaveHandler(_event: DragEvent) {}
-
   private configure() {
     this.element.addEventListener("dragover", this.dragOverHandler.bind(this));
     this.element.addEventListener("drop", this.dropHandler.bind(this));
-    this.element.addEventListener("dragleave", this.dragLeaveHandler);
 
     taskState.addlistener((tasks: Task[]) => {
       const revelantTasks = tasks.filter((task) => {
