@@ -22,10 +22,10 @@ export class TaskInput extends Component<HTMLDivElement, HTMLElement> {
 
   private configure() {
     const formElement = this.element.querySelector("form") as HTMLFormElement;
-    formElement.addEventListener("submit", this.submitHandler.bind(this));
+    formElement.addEventListener("submit", this.submitHandler);
   }
 
-  private submitHandler(event: Event) {
+  private submitHandler = (event: Event) => {
     event.preventDefault();
 
     const collectedInputs = this.collectInputs();
@@ -35,7 +35,7 @@ export class TaskInput extends Component<HTMLDivElement, HTMLElement> {
       taskState.addTask(title, desc);
       this.clearInputs();
     }
-  }
+  };
 
   private collectInputs(): [string, string] | void {
     const enteredTitle = this.titleInputElement.value.trim();

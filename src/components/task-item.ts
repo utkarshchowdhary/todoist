@@ -16,16 +16,13 @@ export class TaskItem
     this.renderContent();
   }
 
-  dragStartHandler(event: DragEvent) {
+  dragStartHandler = (event: DragEvent) => {
     event.dataTransfer!.setData("text/plain", this.task.id);
     event.dataTransfer!.effectAllowed = "move";
-  }
+  };
 
   private configure() {
-    this.element.addEventListener(
-      "dragstart",
-      this.dragStartHandler.bind(this)
-    );
+    this.element.addEventListener("dragstart", this.dragStartHandler);
   }
 
   private renderContent() {

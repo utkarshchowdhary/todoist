@@ -17,24 +17,24 @@ export class TaskList
     this.renderContent();
   }
 
-  dragOverHandler(event: DragEvent) {
+  dragOverHandler = (event: DragEvent) => {
     if (event.dataTransfer && event.dataTransfer.types[0] === "text/plain") {
       event.preventDefault();
     }
-  }
+  };
 
-  dropHandler(event: DragEvent) {
+  dropHandler = (event: DragEvent) => {
     const taskId = event.dataTransfer!.getData("text/plain");
 
     taskState.moveTask(
       taskId,
       this.type === "active" ? TaskStatus.Active : TaskStatus.Completed
     );
-  }
+  };
 
   private configure() {
-    this.element.addEventListener("dragover", this.dragOverHandler.bind(this));
-    this.element.addEventListener("drop", this.dropHandler.bind(this));
+    this.element.addEventListener("dragover", this.dragOverHandler);
+    this.element.addEventListener("drop", this.dropHandler);
 
     taskState.addlistener((tasks: Task[]) => {
       const revelantTasks = tasks.filter((task) => {
